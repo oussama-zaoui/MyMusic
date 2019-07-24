@@ -1,13 +1,20 @@
 package com.example.mymusique;
 
+import android.Manifest;
 import android.content.Intent;
 
+import android.content.pm.PermissionInfo;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 
+import android.provider.Settings;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.youtube.player.YouTubeBaseActivity;
 
@@ -16,6 +23,8 @@ import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
 
+import java.security.Permission;
+import java.security.Permissions;
 
 
 public class MainActivity extends YouTubeBaseActivity {
@@ -51,6 +60,15 @@ public class MainActivity extends YouTubeBaseActivity {
 
         Intent intent = new Intent(this,MyService.class);
 
+
+        if (Build.VERSION.SDK_INT >= 23 && !Settings.canDrawOverlays(this)) {
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.SYSTEM_ALERT_WINDOW},
+                    1);
+            /*Intent i = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + getPackageName()));
+            startActivityForResult(i, Integer.parseInt(Manifest.permission.SYSTEM_ALERT_WINDOW));*/
+        }
 
          startService(new Intent(this,WalkingIconService.class));
 
